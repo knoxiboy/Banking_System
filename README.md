@@ -71,27 +71,27 @@
   <h3> Setup</h3>
 
   <ol>
-    <li><b>Clone the Repository</b>
-      <pre><code>git clone https://github.com/yourusername/java-banking-system.git
-cd java-banking-system</code></pre>
-    </li>
+  <li><b>Clone the Repository</b>
+      <pre><code>git clone https://github.com/knoxiboy/banking_system.git
+cd banking_system</code></pre>
+  </li>
 
-    <li><b>Configure MySQL Database</b>
-      <pre><code>CREATE DATABASE banking_system;
+  <li><b>Configure MySQL Database</b>
+    <pre><code>CREATE DATABASE banking_system;
 
 -- Create `users` and `accounts` tables accordingly</code></pre>
-    </li>
+  </li>
 
-    <li><b>Edit Database Credentials</b>
+  <li><b>Edit Database Credentials</b>
       <pre><code>private static final String url = "jdbc:mysql://localhost:3306/banking_system";
 private static final String username = "root";
 private static final String password = "your_mysql_password";</code></pre>
-    </li>
+  </li>
 
-    <li><b>Compile and Run</b>
+  <li><b>Compile and Run</b>
       <pre><code>javac -d . *.java
 java Projects_java.Banking_System.BankingApp</code></pre>
-    </li>
+  </li>
   </ol>
 
   <hr>
