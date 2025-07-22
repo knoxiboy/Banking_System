@@ -35,19 +35,16 @@
   <h2> Demo Screenshots</h2>
 
   <h4>1. Registration and Login</h4>
-  <img src="./screenshots/Screenshot%202025-07-22%20082655.png" width="600" alt="Registration and Login">
+  <img src="Screenshots/Screenshot 2025-07-22 084853.png" width="600" alt="Registration and Login">
 
-  <h4>2. Banking Operations</h4>
-  <img src="./screenshots/Screenshot%202025-07-22%20082910.png" width="600" alt="Account Creation & Debit">
+  <h4>2. Banking Operations(Debit, Credit & Balance)</h4>
+  <img src="Screenshots/Screenshot 2025-07-22 084944.png" width="600" alt="Account Creation & Debit">
 
-  <h4>3. Credit and Balance Check</h4>
-  <img src="./screenshots/Screenshot%202025-07-22%20083011.png" width="600" alt="Credit & Balance">
+  <h4>3. Fund Transfer Attempt</h4>
+  <img src="Screenshots/Screenshot 2025-07-22 085102.png" width="600" alt="Transfer Money">
 
-  <h4>4. Fund Transfer Attempt</h4>
-  <img src="./screenshots/Screenshot%202025-07-22%20083055.png" width="600" alt="Transfer Money">
-
-  <h4>5. Java Code Entry Point</h4>
-  <img src="./screenshots/Screenshot%202025-07-22%20083119.png" width="600" alt="Main Java File">
+  <h4>4. MySQL Database </h4>
+  <img src="Screenshots/Screenshot 2025-07-22 085455.png" width="600" alt="Main Java File">
 
   <hr>
 
