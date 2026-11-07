@@ -94,6 +94,7 @@ public class BankingApp{
                         else{
                             System.out.println("Incorrect Email or Password!");
                         }
+                        break; // Fix: prevent fall-through from case 2 to case 3
                     case 3:
                         System.out.println("THANK YOU FOR USING BANKING SYSTEM!!!");
                         System.out.println("Exiting System!");
