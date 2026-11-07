@@ -75,8 +75,6 @@ Banking_System/
 │   └── banking_schema.sql              # Automated database DDL setup script
 ├── lib/
 │   └── mysql-connector-j-8.3.0.jar     # Included MySQL JDBC Driver (Ready to run!)
-├── docs/
-│   └── Screenshots/                    # Interface previews and demo captures
 ├── run-gui.bat                         # 1-Click launcher for Swing GUI on Windows
 ├── run-cli.bat                         # 1-Click launcher for CLI Console on Windows
 ├── .gitignore                          # Build artifact and editor cache ignores
