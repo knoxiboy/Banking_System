@@ -30,14 +30,14 @@ CREATE TABLE users (
 -- security_pin is also stored as a SHA-256 hash.
 CREATE TABLE accounts (
     account_number  BIGINT PRIMARY KEY,
-    user_email      VARCHAR(100) NOT NULL,
+    email           VARCHAR(100) NOT NULL,
     full_name       VARCHAR(100) NOT NULL,
     balance         DECIMAL(15, 2) DEFAULT 0.00,
     security_pin    VARCHAR(64)  NOT NULL,       -- SHA-256 hash
     account_type    ENUM('SAVINGS', 'CURRENT') DEFAULT 'SAVINGS',
     status          ENUM('ACTIVE', 'FROZEN') DEFAULT 'ACTIVE',
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_email) REFERENCES users(email)
+    FOREIGN KEY (email) REFERENCES users(email)
 );
 
 -- ─── Table 3: transactions ──────────────────────────────────────────────────

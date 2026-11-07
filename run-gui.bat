@@ -19,3 +19,4 @@ if %ERRORLEVEL% NEQ 0 (
 REM Run Banking GUI application
 java -cp "bin;lib/*" Projects_java.Banking_System.BankingGUI
 pause
+

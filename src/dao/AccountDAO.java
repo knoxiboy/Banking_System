@@ -36,7 +36,7 @@ public class AccountDAO {
         long accountNumber = generateAccountNumber();
         account.setAccountNumber(accountNumber);
 
-        String query = "INSERT INTO accounts (account_number, user_email, full_name, balance, security_pin, account_type, status) " +
+        String query = "INSERT INTO accounts (account_number, email, full_name, balance, security_pin, account_type, status) " +
                        "VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setLong(1, accountNumber);
@@ -72,7 +72,7 @@ public class AccountDAO {
      * Checks if an account exists for the given user email.
      */
     public boolean accountExists(String email) throws SQLException {
-        String query = "SELECT 1 FROM accounts WHERE user_email = ?";
+        String query = "SELECT 1 FROM accounts WHERE email = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, email);
             try (ResultSet rs = ps.executeQuery()) {
@@ -85,8 +85,8 @@ public class AccountDAO {
      * Retrieves account by user email.
      */
     public Account getAccountByEmail(String email) throws SQLException {
-        String query = "SELECT account_number, user_email, full_name, balance, security_pin, account_type, status, created_at " +
-                       "FROM accounts WHERE user_email = ?";
+        String query = "SELECT account_number, email, full_name, balance, security_pin, account_type, status, created_at " +
+                       "FROM accounts WHERE email = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, email);
             try (ResultSet rs = ps.executeQuery()) {
@@ -102,7 +102,7 @@ public class AccountDAO {
      * Retrieves account by account number.
      */
     public Account getAccountByNumber(long accountNumber) throws SQLException {
-        String query = "SELECT account_number, user_email, full_name, balance, security_pin, account_type, status, created_at " +
+        String query = "SELECT account_number, email, full_name, balance, security_pin, account_type, status, created_at " +
                        "FROM accounts WHERE account_number = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setLong(1, accountNumber);
@@ -379,7 +379,7 @@ public class AccountDAO {
      */
     public List<Account> getAllAccounts() throws SQLException {
         List<Account> list = new ArrayList<>();
-        String query = "SELECT account_number, user_email, full_name, balance, security_pin, account_type, status, created_at " +
+        String query = "SELECT account_number, email, full_name, balance, security_pin, account_type, status, created_at " +
                        "FROM accounts ORDER BY account_number ASC";
         try (Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(query)) {
@@ -417,7 +417,7 @@ public class AccountDAO {
     private Account mapResultSetToAccount(ResultSet rs) throws SQLException {
         Account a = new Account();
         a.setAccountNumber(rs.getLong("account_number"));
-        a.setUserEmail(rs.getString("user_email"));
+        a.setUserEmail(rs.getString("email"));
         a.setFullName(rs.getString("full_name"));
         a.setBalance(rs.getDouble("balance"));
         a.setSecurityPin(rs.getString("security_pin"));
