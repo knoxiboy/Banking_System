@@ -46,7 +46,7 @@ The application offers both an **interactive Java Swing Graphical User Interface
 
 ## 🏛️ Project & Folder Structure
 
-The repository follows standard Java conventions with clear segregation of sources, database scripts, and documentation:
+The repository follows standard Java conventions with clear segregation of sources, database scripts, documentation, and dependencies:
 
 ```
 Banking_System/
@@ -73,8 +73,12 @@ Banking_System/
 │       └── PasswordUtil.java           # Cryptographic hashing (SHA-256) & input validation
 ├── sql/
 │   └── banking_schema.sql              # Automated database DDL setup script
+├── lib/
+│   └── mysql-connector-j-8.3.0.jar     # Included MySQL JDBC Driver (Ready to run!)
 ├── docs/
 │   └── Screenshots/                    # Interface previews and demo captures
+├── run-gui.bat                         # 1-Click launcher for Swing GUI on Windows
+├── run-cli.bat                         # 1-Click launcher for CLI Console on Windows
 ├── .gitignore                          # Build artifact and editor cache ignores
 ├── .gitattributes
 └── README.md                           # Documentation & evaluation manual
@@ -144,7 +148,7 @@ erDiagram
 ### Prerequisites
 1. **Java JDK 21 or 22** installed and configured on your `PATH`.
 2. **MySQL Server 8.0+** running locally on port `3306`.
-3. **MySQL Connector/J JAR** (`mysql-connector-j-8.x.x.jar`).
+3. JDBC Driver is **already pre-installed** in the `lib/` folder!
 
 ### Database Initialization
 Run the provided SQL script located in the `sql/` directory:
@@ -162,17 +166,25 @@ If your MySQL credentials differ from the defaults (`root` / `knox`), adjust the
 
 ## 💻 Compilation & Execution
 
-Open a terminal in the root directory:
+Open a PowerShell or Command Prompt terminal inside `Banking_System`:
 
-```bash
-# 1. Compile the entire application cleanly into an isolated bin/ directory
-javac -d bin src/model/*.java src/util/*.java src/dao/*.java src/ui/*.java src/*.java
+### Method A: One-Click Launchers (Easiest)
+Simply double-click or run:
+```powershell
+.\run-gui.bat     # Launches the Swing GUI
+.\run-cli.bat     # Launches the CLI Console
+```
+
+### Method B: Manual PowerShell Commands
+```powershell
+# 1. Compile all source files into the bin directory
+javac -cp "lib/*" -d bin (Get-ChildItem -Recurse src/*.java | Select-Object -ExpandProperty FullName)
 
 # 2. Run the Graphical User Interface (Swing GUI)
-java -cp "bin;path/to/mysql-connector-j-8.x.x.jar" Projects_java.Banking_System.BankingGUI
+java -cp "bin;lib/*" Projects_java.Banking_System.BankingGUI
 
 # 3. (Optional) Run the CLI Console Version
-java -cp "bin;path/to/mysql-connector-j-8.x.x.jar" Projects_java.Banking_System.BankingApp
+java -cp "bin;lib/*" Projects_java.Banking_System.BankingApp
 ```
 
 ---
