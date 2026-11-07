@@ -8,13 +8,13 @@
 
 A full-featured, enterprise-grade Digital Banking Application built in Java adhering strictly to Object-Oriented Programming (OOP) paradigms, Layered Architecture (Model-DAO-UI-Util), and ACID Transaction Principles.
 
-The application offers both an **interactive Java Swing Graphical User Interface (GUI)** with event handling as well as the **original console interface** for backward compatibility.
+The application offers both an **interactive Java Swing Graphical User Interface (GUI)** with event handling as well as a modernized **Command-Line Interface (CLI)** sharing the exact same DAO layer and cryptographic security.
 
 ---
 
 ## 📑 Table of Contents
 1. [Key Features](#-key-features)
-2. [System Architecture](#-system-architecture)
+2. [Project & Folder Structure](#-project--folder-structure)
 3. [Database Schema](#-database-schema)
 4. [OOP & Core Java Concepts](#-oop--core-java-concepts-demonstrated)
 5. [Installation & Setup](#-installation--setup)
@@ -33,7 +33,7 @@ The application offers both an **interactive Java Swing Graphical User Interface
 - **Debit / Cash Withdrawal**: Balance validation, active account verification, and automated transaction logging.
 - **Credit / Cash Deposit**: Instant balance updates with atomic database commits.
 - **Inter-Bank / P2P Fund Transfers**: Guaranteed atomic execution using JDBC manual commit and rollback (`connection.setAutoCommit(false)`), ensuring neither account loses funds in case of communication or system failure.
-- **Mini-Statement**: Quick-view dialog of the last 5 transactions.
+- **Mini-Statement**: Quick-view modal of the last 5 transactions.
 - **Passbook & Transaction History**: Dedicated, color-coded `JTable` view (green for incoming credits, red for outgoing debits) with type filtering (All, Credits, Debits, Transfers).
 
 ### 🛡️ Administrative & Fraud Prevention Console
@@ -44,35 +44,40 @@ The application offers both an **interactive Java Swing Graphical User Interface
 
 ---
 
-## 🏛️ System Architecture
+## 🏛️ Project & Folder Structure
 
-The codebase strictly enforces **Separation of Concerns (SoC)** through a 4-tier layered architecture:
+The repository follows standard Java conventions with clear segregation of sources, database scripts, and documentation:
 
 ```
-Projects_java/Banking_System/
-├── banking_schema.sql                  # Automated database DDL setup script
-├── README.md                           # Documentation & evaluation manual
-└── Code/
-    ├── BankingGUI.java                 # Master Swing GUI Controller & Entry Point
-    ├── BankingApp.java                 # Legacy CLI Entry Point
-    ├── model/                          # Encapsulated Data Transfer POJOs
-    │   ├── User.java                   # User entity (id, email, password hash, role)
-    │   ├── Account.java                # Bank account entity (number, balance, status)
-    │   └── Transaction.java            # Audit record (type, amount, balanceAfter)
-    ├── dao/                            # Data Access Layer (Direct JDBC & PreparedStatements)
-    │   ├── DBConnection.java           # Thread-safe Singleton Connection Manager
-    │   ├── UserDAO.java                # Authentication, Registration & Hash verification
-    │   ├── AccountDAO.java             # Balance mutation, transfers & freeze controls
-    │   └── TransactionDAO.java         # Transaction logging and history queries
-    ├── ui/                             # Presentation Tier (Java Swing + Event Handling)
-    │   ├── UITheme.java                # Modern color palette, typography & styled widgets
-    │   ├── LoginPanel.java             # Responsive authentication view
-    │   ├── RegisterPanel.java          # Client onboarding view
-    │   ├── DashboardPanel.java         # Account summary, balance toggle & actions grid
-    │   ├── TransactionPanel.java       # Filterable passbook table with custom renderer
-    │   └── AdminPanel.java             # Tabbed staff dashboard with freeze & audit tools
-    └── util/
-        └── PasswordUtil.java           # Cryptographic hashing (SHA-256) & input validation
+Banking_System/
+├── src/                                # Standard Java Source Root
+│   ├── BankingGUI.java                 # Master Swing GUI Controller & Entry Point
+│   ├── BankingApp.java                 # CLI Console Entry Point (Unified DAO Backend)
+│   ├── model/                          # Encapsulated Data Transfer POJOs
+│   │   ├── User.java                   # User entity (id, email, password hash, role)
+│   │   ├── Account.java                # Bank account entity (number, balance, status)
+│   │   └── Transaction.java            # Audit record (type, amount, balanceAfter)
+│   ├── dao/                            # Data Access Layer (Direct JDBC & PreparedStatements)
+│   │   ├── DBConnection.java           # Thread-safe Singleton Connection Manager
+│   │   ├── UserDAO.java                # Authentication, Registration & Hash verification
+│   │   ├── AccountDAO.java             # Balance mutation, transfers & freeze controls
+│   │   └── TransactionDAO.java         # Transaction logging and history queries
+│   ├── ui/                             # Presentation Tier (Java Swing + Event Handling)
+│   │   ├── UITheme.java                # Modern color palette, typography & styled widgets
+│   │   ├── LoginPanel.java             # Responsive authentication view
+│   │   ├── RegisterPanel.java          # Client onboarding view
+│   │   ├── DashboardPanel.java         # Account summary, balance toggle & actions grid
+│   │   ├── TransactionPanel.java       # Filterable passbook table with custom renderer
+│   │   └── AdminPanel.java             # Tabbed staff dashboard with freeze & audit tools
+│   └── util/
+│       └── PasswordUtil.java           # Cryptographic hashing (SHA-256) & input validation
+├── sql/
+│   └── banking_schema.sql              # Automated database DDL setup script
+├── docs/
+│   └── Screenshots/                    # Interface previews and demo captures
+├── .gitignore                          # Build artifact and editor cache ignores
+├── .gitattributes
+└── README.md                           # Documentation & evaluation manual
 ```
 
 ---
@@ -142,16 +147,16 @@ erDiagram
 3. **MySQL Connector/J JAR** (`mysql-connector-j-8.x.x.jar`).
 
 ### Database Initialization
-Run the provided SQL script in MySQL Workbench, MySQL Shell, or command line:
+Run the provided SQL script located in the `sql/` directory:
 ```bash
-mysql -u root -p < banking_schema.sql
+mysql -u root -p < sql/banking_schema.sql
 ```
 *(Enter your MySQL password when prompted).*
 
 ### Database Credentials Configuration
 If your MySQL credentials differ from the defaults (`root` / `knox`), adjust them in:
-- `BankingGUI.java` (lines 35-37)
-- `BankingApp.java` (lines 8-10)
+- `src/BankingGUI.java` (lines 35-37)
+- `src/BankingApp.java` (lines 25-27)
 
 ---
 
@@ -160,17 +165,14 @@ If your MySQL credentials differ from the defaults (`root` / `knox`), adjust the
 Open a terminal in the root directory:
 
 ```bash
-# 1. Navigate to the project root
-cd c:\Users\HP\OneDrive\Desktop\Padhai\Projects_java
+# 1. Compile the entire application cleanly into an isolated bin/ directory
+javac -d bin src/model/*.java src/util/*.java src/dao/*.java src/ui/*.java src/*.java
 
-# 2. Compile the entire application
-javac -d . Banking_System/Code/model/*.java Banking_System/Code/util/*.java Banking_System/Code/dao/*.java Banking_System/Code/ui/*.java Banking_System/Code/*.java
+# 2. Run the Graphical User Interface (Swing GUI)
+java -cp "bin;path/to/mysql-connector-j-8.x.x.jar" Projects_java.Banking_System.BankingGUI
 
-# 3. Run the Graphical User Interface (Swing GUI)
-java -cp ".;path/to/mysql-connector-j-8.x.x.jar" Projects_java.Banking_System.BankingGUI
-
-# 4. (Optional) Run the Console Version
-java -cp ".;path/to/mysql-connector-j-8.x.x.jar" Projects_java.Banking_System.BankingApp
+# 3. (Optional) Run the CLI Console Version
+java -cp "bin;path/to/mysql-connector-j-8.x.x.jar" Projects_java.Banking_System.BankingApp
 ```
 
 ---

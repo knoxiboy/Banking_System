@@ -1,13 +1,20 @@
-# Compiled Java class files
+# Compiled Java class files & directories
 *.class
+bin/
+out/
+target/
+build/
 Projects_java/
 
-# IDE files
+# IDE & Editor caches
 .vscode/
 .idea/
 *.iml
+*.project
+*.classpath
+.settings/
 
-# OS files
+# Operating System files
 .DS_Store
 Thumbs.db
-
+desktop.ini
