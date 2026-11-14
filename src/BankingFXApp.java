@@ -127,15 +127,18 @@ public class BankingFXApp extends Application {
 
     public void showDashboardAfterTx() {
         if (currentLoggedInUser != null) {
-            dashboardView.setUserAndAccount(currentLoggedInUser, currentLoggedInAccount);
-            rootPane.getChildren().setAll(dashboardView);
+            if ("ADMIN".equalsIgnoreCase(currentLoggedInUser.getRole())) {
+                showAdmin(currentLoggedInUser);
+            } else {
+                showDashboard(currentLoggedInUser, currentLoggedInAccount);
+            }
         } else {
             showLogin();
         }
     }
 
     public void showTransactions(Account account) {
-        transactionView.setAccount(account);
+        transactionView.setAccount(account, currentLoggedInUser);
         rootPane.getChildren().setAll(transactionView);
     }
 
@@ -149,3 +152,4 @@ public class BankingFXApp extends Application {
         launch(args);
     }
 }
+

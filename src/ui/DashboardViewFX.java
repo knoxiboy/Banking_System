@@ -611,7 +611,8 @@ public class DashboardViewFX extends BorderPane {
                 UIThemeFX.showAlert(Alert.AlertType.INFORMATION, "Account Created", "Welcome to Apex Digital Banking!",
                         "Congratulations!\nYour Bank Account has been opened successfully!\n\nAccount Number: " + accNum);
 
-                setUserAndAccount(currentUser, accountDAO.getAccountByNumber(accNum));
+                Account createdAcc = accountDAO.getAccountByNumber(accNum);
+                app.showDashboard(currentUser, createdAcc);
 
             } catch (NumberFormatException e) {
                 UIThemeFX.showAlert(Alert.AlertType.WARNING, "Invalid Input", "Numeric Amount Required", "Please enter a valid numeric deposit amount.");
@@ -631,3 +632,4 @@ public class DashboardViewFX extends BorderPane {
         return true;
     }
 }
+

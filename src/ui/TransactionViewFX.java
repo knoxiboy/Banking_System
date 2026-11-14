@@ -4,6 +4,7 @@ import Projects_java.Banking_System.BankingFXApp;
 import Projects_java.Banking_System.dao.TransactionDAO;
 import Projects_java.Banking_System.model.Account;
 import Projects_java.Banking_System.model.Transaction;
+import Projects_java.Banking_System.model.User;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,12 +30,14 @@ public class TransactionViewFX extends BorderPane {
     private final TransactionDAO transactionDAO;
 
     private Account currentAccount;
+    private User currentViewer;
     private TableView<Transaction> table;
     private ObservableList<Transaction> masterList = FXCollections.observableArrayList();
     private ObservableList<Transaction> filteredList = FXCollections.observableArrayList();
 
     private ComboBox<String> filterBox;
     private Label countLabel;
+    private Button backBtn;
 
     public TransactionViewFX(BankingFXApp app, TransactionDAO transactionDAO) {
         this.app = app;
@@ -53,7 +56,7 @@ public class TransactionViewFX extends BorderPane {
         title.setTextFill(Color.WHITE);
         HBox.setHgrow(title, Priority.ALWAYS);
 
-        Button backBtn = UIThemeFX.createButton("← Back to Dashboard", UIThemeFX.PRIMARY_HOVER_HEX, "#1E88E5");
+        backBtn = UIThemeFX.createButton("← Back to Dashboard", UIThemeFX.PRIMARY_HOVER_HEX, "#1E88E5");
         backBtn.setOnAction(e -> app.showDashboardAfterTx());
 
         topHeader.getChildren().addAll(title, backBtn);
@@ -156,7 +159,19 @@ public class TransactionViewFX extends BorderPane {
     }
 
     public void setAccount(Account account) {
+        setAccount(account, null);
+    }
+
+    public void setAccount(Account account, User viewer) {
         this.currentAccount = account;
+        this.currentViewer = viewer;
+
+        if (viewer != null && "ADMIN".equalsIgnoreCase(viewer.getRole())) {
+            backBtn.setText("← Back to Admin Console");
+        } else {
+            backBtn.setText("← Back to Dashboard");
+        }
+
         loadTransactions();
     }
 
@@ -192,3 +207,4 @@ public class TransactionViewFX extends BorderPane {
         countLabel.setText(String.format("Showing %d of %d transactions", res.size(), masterList.size()));
     }
 }
+

@@ -21,6 +21,14 @@ public class AccountDAO {
     public AccountDAO(Connection connection, TransactionDAO transactionDAO) {
         this.connection = connection;
         this.transactionDAO = transactionDAO;
+        ensureSchemaCompatibility();
+    }
+
+    private void ensureSchemaCompatibility() {
+        try (Statement st = connection.createStatement()) {
+            st.execute("ALTER TABLE accounts MODIFY COLUMN security_pin VARCHAR(64) NOT NULL");
+        } catch (SQLException ignored) {
+        }
     }
 
     /**

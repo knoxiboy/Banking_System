@@ -326,3 +326,4 @@ public class AdminViewFX extends BorderPane {
         app.showTransactions(selected);
     }
 }
+

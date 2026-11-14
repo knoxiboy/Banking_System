@@ -163,3 +163,4 @@ public class LoginViewFX extends BorderPane {
         passwordField.clear();
     }
 }
+

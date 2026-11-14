@@ -17,7 +17,15 @@ public class UserDAO {
 
     public UserDAO(Connection connection) {
         this.connection = connection;
+        ensureSchemaCompatibility();
         createDefaultAdminIfNotExists();
+    }
+
+    private void ensureSchemaCompatibility() {
+        try (Statement st = connection.createStatement()) {
+            st.execute("ALTER TABLE user MODIFY COLUMN password VARCHAR(100) NOT NULL");
+        } catch (SQLException ignored) {
+        }
     }
 
     /**

@@ -175,3 +175,4 @@ public class RegisterViewFX extends BorderPane {
         confirmPassField.clear();
     }
 }
+
