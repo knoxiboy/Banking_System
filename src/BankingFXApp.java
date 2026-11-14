@@ -65,7 +65,7 @@ public class BankingFXApp extends Application {
 
         // Views
         loginView       = new LoginViewFX(this, userDAO, accountDAO);
-        registerView    = new RegisterViewFX(this, userDAO);
+        registerView    = new RegisterViewFX(this, userDAO, accountDAO);
         dashboardView   = new DashboardViewFX(this, accountDAO, transactionDAO);
         transactionView = new TransactionViewFX(this, transactionDAO);
         adminView       = new AdminViewFX(this, accountDAO, transactionDAO);

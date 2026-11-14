@@ -1,7 +1,9 @@
 package Projects_java.Banking_System.ui;
 
 import Projects_java.Banking_System.BankingFXApp;
+import Projects_java.Banking_System.dao.AccountDAO;
 import Projects_java.Banking_System.dao.UserDAO;
+import Projects_java.Banking_System.model.Account;
 import Projects_java.Banking_System.model.User;
 import Projects_java.Banking_System.util.PasswordUtil;
 import javafx.geometry.Insets;
@@ -23,15 +25,18 @@ public class RegisterViewFX extends BorderPane {
 
     private final BankingFXApp app;
     private final UserDAO userDAO;
+    private final AccountDAO accountDAO;
 
     private TextField nameField;
     private TextField emailField;
     private PasswordField passField;
     private PasswordField confirmPassField;
+    private PasswordField pinField;
 
-    public RegisterViewFX(BankingFXApp app, UserDAO userDAO) {
+    public RegisterViewFX(BankingFXApp app, UserDAO userDAO, AccountDAO accountDAO) {
         this.app = app;
         this.userDAO = userDAO;
+        this.accountDAO = accountDAO;
 
         setStyle("-fx-background-color: " + UIThemeFX.BG_LIGHT_HEX + ";");
 
@@ -74,7 +79,10 @@ public class RegisterViewFX extends BorderPane {
         confirmPassField = UIThemeFX.createPasswordField("Re-enter password");
         VBox confirmPassBox = UIThemeFX.createFormField("Confirm Password", confirmPassField);
 
-        Button registerBtn = UIThemeFX.createButton("Create Profile", UIThemeFX.SUCCESS_HEX, UIThemeFX.SUCCESS_HOVER_HEX);
+        pinField = UIThemeFX.createPasswordField("4 to 6 digit numeric PIN");
+        VBox pinBox = UIThemeFX.createFormField("Security PIN (4-6 digits for transactions)", pinField);
+
+        Button registerBtn = UIThemeFX.createButton("Create Profile & Open Account", UIThemeFX.SUCCESS_HEX, UIThemeFX.SUCCESS_HOVER_HEX);
         registerBtn.setMaxWidth(Double.MAX_VALUE);
         registerBtn.setPrefHeight(40);
 
@@ -92,7 +100,7 @@ public class RegisterViewFX extends BorderPane {
         card.getChildren().addAll(
                 titleLbl, subLbl,
                 new Region() {{ setPrefHeight(5); }},
-                nameBox, emailBox, passBox, confirmPassBox,
+                nameBox, emailBox, passBox, confirmPassBox, pinBox,
                 new Region() {{ setPrefHeight(8); }},
                 registerBtn, backBox
         );
@@ -125,8 +133,9 @@ public class RegisterViewFX extends BorderPane {
         String email = emailField.getText().trim();
         String pass = passField.getText().trim();
         String confirm = confirmPassField.getText().trim();
+        String pin = pinField.getText().trim();
 
-        if (name.isEmpty() || email.isEmpty() || pass.isEmpty() || confirm.isEmpty()) {
+        if (name.isEmpty() || email.isEmpty() || pass.isEmpty() || confirm.isEmpty() || pin.isEmpty()) {
             UIThemeFX.showAlert(Alert.AlertType.WARNING, "Validation Error", "Missing Fields", "All fields are required. Please fill in all details.");
             return;
         }
@@ -146,6 +155,11 @@ public class RegisterViewFX extends BorderPane {
             return;
         }
 
+        if (!PasswordUtil.isValidPin(pin)) {
+            UIThemeFX.showAlert(Alert.AlertType.WARNING, "Validation Error", "Invalid PIN", "Security PIN must be 4 to 6 numeric digits.");
+            return;
+        }
+
         try {
             if (userDAO.userExists(email)) {
                 UIThemeFX.showAlert(Alert.AlertType.ERROR, "Registration Error", "User Exists", "An account with this email address already exists!");
@@ -155,8 +169,15 @@ public class RegisterViewFX extends BorderPane {
             User newUser = new User(name, email, pass);
             boolean ok = userDAO.register(newUser);
             if (ok) {
-                UIThemeFX.showAlert(Alert.AlertType.INFORMATION, "Registration Successful", "Profile Created",
-                        "Your profile has been created successfully!\nYou can now log in with your email and password.");
+                // Provision initial bank account automatically with ₹1,000 welcome deposit
+                Account newAcc = new Account(0, email, name, 1000.00, pin, "SAVINGS");
+                long accNum = accountDAO.openAccount(newAcc);
+
+                UIThemeFX.showAlert(Alert.AlertType.INFORMATION, "Registration Successful", "Profile & Bank Account Created!",
+                        "Congratulations, " + name + "!\n\nYour digital profile and bank account have been created successfully!\n" +
+                        "• Account Number: " + accNum + "\n" +
+                        "• Opening Balance: ₹ 1,000.00\n\n" +
+                        "You can now log in using your email and password.");
                 clearFields();
                 app.showLogin();
             } else {
@@ -173,6 +194,7 @@ public class RegisterViewFX extends BorderPane {
         emailField.clear();
         passField.clear();
         confirmPassField.clear();
+        pinField.clear();
     }
 }
 
