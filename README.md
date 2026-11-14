@@ -36,7 +36,7 @@ The application implements a strict **4-Tier MVC / DAO Architecture**. Domain mo
 
 ```mermaid
 flowchart TD
-    subgraph Presentation Tier [JavaFX Presentation Tier]
+    subgraph PresentationTier ["JavaFX Presentation Tier"]
         LoginView[LoginViewFX]
         RegView[RegisterViewFX]
         DashView[DashboardViewFX]
@@ -45,7 +45,7 @@ flowchart TD
         Theme[UIThemeFX]
     end
 
-    subgraph Controller [Application Orchestration]
+    subgraph ControllerTier ["Application Orchestration"]
         BankingGUI[BankingGUI Launcher] --> BankingFXApp[BankingFXApp Controller]
         BankingFXApp --> LoginView
         BankingFXApp --> RegView
@@ -54,24 +54,24 @@ flowchart TD
         BankingFXApp --> AdminView
     end
 
-    subgraph Data Access Layer [DAO Layer]
+    subgraph DAOLayer ["DAO Layer"]
         UserDAO[UserDAO]
         AccountDAO[AccountDAO]
         TransactionDAO[TransactionDAO]
         DBC[DBConnection Singleton]
     end
 
-    subgraph Domain Models [Domain Model Layer]
+    subgraph DomainModels ["Domain Model Layer"]
         User[User Model]
         Account[Account Model]
         Tx[Transaction Model]
     end
 
-    subgraph Security Utilities [Security Utilities]
+    subgraph SecurityUtilities ["Security Utilities"]
         PassUtil[PasswordUtil SHA-256]
     end
 
-    subgraph Database [MySQL 8.0 Database]
+    subgraph DatabaseLayer ["MySQL 8.0 Database"]
         SQLUsers[(users / user)]
         SQLAccounts[(accounts)]
         SQLTx[(transactions)]
@@ -79,7 +79,7 @@ flowchart TD
 
     LoginView & RegView & DashView & TxView & AdminView --> UserDAO & AccountDAO & TransactionDAO
     UserDAO & AccountDAO & TransactionDAO --> DBC
-    DBC --> Database
+    DBC --> DatabaseLayer
     UserDAO & AccountDAO & TransactionDAO -.-> User & Account & Tx
     UserDAO & AccountDAO & RegView & LoginView --> PassUtil
 ```
@@ -138,7 +138,7 @@ sequenceDiagram
         Dash-->>Customer: "Transfer Complete! ₹500 sent."
     else Any exception occurs
         DAO->>DB: connection.rollback()
-        Note over DAO,DB: All changes undone; zero funds lost
+        Note over DAO,DB: All changes undone and zero funds lost
         DAO-->>Dash: throw Exception
         Dash-->>Customer: Alert: "Transfer Failed: Error message"
     end
